@@ -1,182 +1,64 @@
-\# Mental Health Risk Predictor
-
-
+# Mental Health Risk Predictor
 
 Predicts whether an individual is at high or low risk for a mental health condition based on lifestyle factors such as sleep, screen time, work hours, and social interaction.
 
+**Live API:** https://mental-health-predictor-t0og.onrender.com/docs
 
-
-\*\*Live API:\*\* https://mental-health-predictor-t0og.onrender.com/docs
-
-
-
-\## Problem
-
-
+## Problem
 
 Mental health conditions affect 1 in 4 people globally, yet most go undetected until they reach a critical stage. Early identification of at-risk individuals based on lifestyle patterns allows for timely intervention — reducing long-term healthcare costs and improving outcomes.
 
+## Dataset
 
+- Source: Mental Health and Lifestyle Habits Dataset (2019–2024), Kaggle
+- 3,000 records across 12 features
+- Features: age, gender, sleep hours, exercise level, diet type, work hours, screen time, social interaction score, happiness score
+- Target: binary risk classification (High Risk / Low Risk)
 
-This project demonstrates how machine learning can be applied to lifestyle data to flag high-risk individuals, a use case directly applicable to HR platforms, wellness apps, and healthcare providers.
+## Model Performance
 
+| Model | F1 Score | AUC |
+|---|---|---|
+| Logistic Regression | 0.707 | 0.817 |
+| Random Forest | 0.740 | 0.807 |
+| XGBoost | 0.714 | 0.792 |
 
+Best model: Random Forest (F1: 0.740). Sleep Hours is the strongest predictor (importance: 0.477).
 
-\## Dataset
+## How to Run Locally
 
-
-
-\- Source: Mental Health and Lifestyle Habits Dataset (2019–2024), Kaggle
-
-\- 3,000 records across 12 features
-
-\- Features: age, gender, sleep hours, exercise level, diet type, work hours, screen time, social interaction score, happiness score
-
-\- Target: binary risk classification (High Risk / Low Risk) derived from clinical proxies
-
-
-
-\## Model Performance
-
-
-
-| Model               | F1 Score | AUC   |
-
-|---------------------|----------|-------|
-
-| Logistic Regression | 0.707    | 0.817 |
-
-| Random Forest       | 0.740    | 0.807 |
-
-| XGBoost             | 0.714    | 0.792 |
-
-
-
-Best model: Random Forest (F1: 0.740)
-
-
-
-Key finding: Sleep Hours is the strongest predictor (importance: 0.477), followed by Social Interaction Score and Happiness Score.
-
-
-
-\## Project Structure
-
-mental-health-predictor/
-
-├── app/
-
-│   └── main.py           # FastAPI application
-
-├── data/
-
-│   └── raw/              # Source dataset
-
-├── notebooks/
-
-│   └── 01\_eda.ipynb      # Exploratory data analysis
-
-├── src/
-
-│   ├── preprocess.py     # Data cleaning and feature engineering
-
-│   ├── train.py          # Model training and evaluation
-
-│   └── predict.py        # Inference logic
-
-├── tests/
-
-│   └── test\_predict.py   # Unit tests
-
-└── requirements.txt
-
-\## How to Run Locally
-
-
-
-```bash
-
-git clone https://github.com/tarekjundi10/mental-health-predictor.git
-
-cd mental-health-predictor
-
-pip install -r requirements.txt
-
-python src/train.py
-
-uvicorn app.main:app --reload
-
-```
-
-
+    git clone https://github.com/tarekjundi10/mental-health-predictor.git
+    cd mental-health-predictor
+    pip install -r requirements.txt
+    python src/train.py
+    uvicorn app.main:app --reload
 
 Open http://127.0.0.1:8000/docs
 
+## API Example
 
+Send a POST request to `/predict`:
 
-\## API Usage
-
-
-
-POST `/predict`
-
-
-
-Request body:
-
-
-
-```json
-
-{
-
-&#x20; "age": 28,
-
-&#x20; "gender": 1,
-
-&#x20; "exercise\_level": 1,
-
-&#x20; "diet\_type": 0,
-
-&#x20; "sleep\_hours": 4.5,
-
-&#x20; "work\_hours\_per\_week": 55,
-
-&#x20; "screen\_time\_per\_day": 8.0,
-
-&#x20; "social\_interaction\_score": 3.2,
-
-&#x20; "happiness\_score": 3.5
-
-}
-
-```
-
-
+    {
+      "age": 28,
+      "gender": 1,
+      "exercise_level": 1,
+      "diet_type": 0,
+      "sleep_hours": 4.5,
+      "work_hours_per_week": 55,
+      "screen_time_per_day": 8.0,
+      "social_interaction_score": 3.2,
+      "happiness_score": 3.5
+    }
 
 Response:
 
+    {
+      "risk_level": "High Risk",
+      "confidence": 0.97,
+      "recommendation": "Consider consulting a mental health professional."
+    }
 
-
-```json
-
-{
-
-&#x20; "risk\_level": "High Risk",
-
-&#x20; "confidence": 0.97,
-
-&#x20; "recommendation": "Consider consulting a mental health professional."
-
-}
-
-```
-
-
-
-\## Tech Stack
-
-
+## Tech Stack
 
 Python · scikit-learn · XGBoost · FastAPI · pandas · Render
-
